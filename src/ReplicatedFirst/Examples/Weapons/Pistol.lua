@@ -123,6 +123,7 @@ function PistolModule:ServerProcessCommand(command)
 				local origin = serverChickynoid.simulation.state.pos
 				local dest = command.fa
 				local vec = (dest - origin).Unit
+				print("[Pistol] Fired! origin:", origin, "dir:", vec)
 				local pos, normal, otherPlayer = self.weaponModule:QueryBullet(
 					self.playerRecord,
 					self.server,
@@ -131,9 +132,11 @@ function PistolModule:ServerProcessCommand(command)
 					command.serverTime,
 					nil
 				)
+				print("[Pistol] QueryBullet result - pos:", pos, "normal:", normal, "otherPlayer:", otherPlayer)
 				local surface = 0
 				if otherPlayer then
 					surface = 1
+					print("[Pistol] HIT PLAYER! userId:", otherPlayer.userId, "hp:", otherPlayer.hitPoints)
 				end
 
 				local event = {}
@@ -148,6 +151,9 @@ function PistolModule:ServerProcessCommand(command)
 					local HitPoints = ServerMods:GetMod("servermods", "Hitpoints")
 					if HitPoints then
 						HitPoints:DamagePlayer(otherPlayer, 20, self.playerRecord)
+						print("[Pistol] Damaged! New HP:", otherPlayer.hitPoints)
+					else
+						warn("[Pistol] Hitpoints mod NOT FOUND!")
 					end
 				end
 			end

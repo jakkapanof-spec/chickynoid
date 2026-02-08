@@ -50,7 +50,8 @@ function module:Setup(server)
 end
 
 function module:LoadPlayerData(playerRecord)
-	playerRecord.coins = 0
+	local START_COINS = 5000
+	playerRecord.coins = START_COINS
 	playerRecord.ownedWeapons = { "Pistol" }
 	playerRecord.dataLoaded = false
 
@@ -60,7 +61,7 @@ function module:LoadPlayerData(playerRecord)
 		end)
 
 		if ok and data then
-			playerRecord.coins = data.coins or 0
+			playerRecord.coins = math.max(data.coins or 0, START_COINS)
 			if data.ownedWeapons and #data.ownedWeapons > 0 then
 				playerRecord.ownedWeapons = data.ownedWeapons
 			end

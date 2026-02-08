@@ -317,7 +317,7 @@ function module:Think(server, deltaTime)
         --Trace a line
         local params = RaycastParams.new()
         params.FilterType = Enum.RaycastFilterType.Include
-        params.FilterDescendantsInstances = { game.Workspace.Terrain, server:GetCollisionRoot() }
+        params.FilterDescendantsInstances = { game.Workspace.Terrain, server.collisionRootFolder or game.Workspace }
         local results = game.Workspace:Raycast(oldPos, rocket.pos - oldPos, params)
         if results ~= nil then
             timePassed = 1000 --Boom
