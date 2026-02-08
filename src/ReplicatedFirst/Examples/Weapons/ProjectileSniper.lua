@@ -4,6 +4,7 @@ ProjectileSniper.__index = ProjectileSniper
 
 local path = game.ReplicatedFirst.Packages.Chickynoid
 local EffectsModule = require(path.Client.Effects)
+local BloodEffect = require(game.ReplicatedFirst.Examples.BloodEffect)
 local WriteBuffer = require(path.Shared.Vendor.WriteBuffer)
 local ReadBuffer = require(path.Shared.Vendor.ReadBuffer)
 local Enums = require(path.Shared.Enums)
@@ -121,9 +122,7 @@ function ProjectileSniper:ClientOnBulletImpact(_client, event)
             effect.CFrame = cframe
         end
         if event.surface == 1 then
-            local effect = EffectsModule:SpawnEffect("ImpactPlayer", event.position)
-            local cframe = CFrame.lookAt(event.position, event.position + event.normal)
-            effect.CFrame = cframe
+            BloodEffect:Spawn(event.position, event.normal)
         end
     end
     ClientFastProjectiles:TerminateBullet(event.bulletId)
@@ -235,7 +234,7 @@ function ProjectileSniper:ServerProcessCommand(command)
 						--Use the hitpoints mod to damage them!
 						local HitPoints = ServerMods:GetMod("servermods", "Hitpoints")
 						if HitPoints then
-							HitPoints:DamagePlayer(bulletRecord.otherPlayer, 50)
+							HitPoints:DamagePlayer(bulletRecord.otherPlayer, 50, self.playerRecord)
 						end
 					end
                 end

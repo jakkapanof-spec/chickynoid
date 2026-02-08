@@ -3,6 +3,7 @@ MachineGunModule.__index = MachineGunModule
 
 local path = game.ReplicatedFirst.Packages.Chickynoid
 local EffectsModule = require(path.Client.Effects)
+local BloodEffect = require(game.ReplicatedFirst.Examples.BloodEffect)
 local WriteBuffer = require(path.Shared.Vendor.WriteBuffer)
 local ReadBuffer = require(path.Shared.Vendor.ReadBuffer)
 local ServerMods = nil 
@@ -84,9 +85,7 @@ function MachineGunModule:ClientOnBulletImpact(_client, event)
             effect.CFrame = cframe
         end
         if event.surface == 1 then
-            local effect = EffectsModule:SpawnEffect("ImpactPlayer", event.position)
-            local cframe = CFrame.lookAt(event.position, event.position + event.normal)
-            effect.CFrame = cframe
+            BloodEffect:Spawn(event.position, event.normal)
         end
     end
 
@@ -171,7 +170,7 @@ function MachineGunModule:ServerProcessCommand(command)
 					
                     local HitPoints = ServerMods:GetMod("servermods", "Hitpoints")
                     if HitPoints then
-                        HitPoints:DamagePlayer(otherPlayer, 10)
+                        HitPoints:DamagePlayer(otherPlayer, 10, self.playerRecord)
                     end
                 end
             end

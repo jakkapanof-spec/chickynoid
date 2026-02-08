@@ -2,19 +2,18 @@ local module = {}
 
 function module:Setup(server)
 
-    --Give spawning players a weapon
+    --Give spawning players their owned weapons
     server.OnPlayerSpawn:Connect(function(playerRecord)
-                
-        --Give a machine gun
-        --playerRecord:AddWeaponByName("Machinegun", true)
-        playerRecord:AddWeaponByName("ProjectileSniper", true)
-        
+        local ownedWeapons = playerRecord.ownedWeapons or { "Pistol" }
+        for i, weaponName in ipairs(ownedWeapons) do
+            playerRecord:AddWeaponByName(weaponName, i == 1)
+        end
     end)
 
     server.OnBeforePlayerSpawn:Connect(function(playerRecord)
-    
+
         playerRecord.chickynoid.simulation:SetAngle(math.rad(90), true)
-    
+
     end)
 
 
